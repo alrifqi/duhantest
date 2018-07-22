@@ -49,7 +49,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
+        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client'), path.resolve(__dirname, "src"), require.resolve("bootstrap-vue"),]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -75,6 +75,13 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       }
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     { loader: 'style-loader' },
+      //     { loader: 'css-loader' }
+      //   ]
+      // }
     ]
   },
   node: {
