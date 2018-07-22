@@ -1,58 +1,93 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col">
+  <div class="main-container">
+    <div class="container" v-bind:class="{ 'two-part': showPanelPost || showPanelProfile }">
+      <div class="row">
+        <div class="col">
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <div>
-          <table class="table">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>
-                Action
-              </th>
-            </tr>
-            </thead>
+      <div class="row">
+        <div class="col">
+          <div>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>
+                  Action
+                </th>
+              </tr>
+              </thead>
 
-            <tbody>
-            <tr v-for="data in tbodyData" :key="data.id">
-              <td>{{ data.id }}</td>
-              <td>{{ data.name }}</td>
-              <td>{{ data.username }}</td>
-              <td>{{ data.email }}</td>
-              <td>
-                <router-link class="btn btn-primary btn-sm" :to="{ name: 'user.posts.list', params: { id: data.id }}">
-                  View User Post
-                </router-link>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+              <tbody>
+              <tr v-for="data in tbodyData" :key="data.id">
+                <td>{{ data.id }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.email }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm" v-on:click="showUserPosts(data)">
+                    View User Post
+                  </button>
+                  <button class="btn btn-primary btn-sm" v-on:click="showUserAlbums(data)">
+                    View User Album
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
+    <UserPostsPanel v-bind:postDatas="userPostsData" v-bind:userDatas="currentUserData" v-if="showPanelPost"/>
+    <UserAlbumPanel v-bind:albumDatas="userAlbumsData" v-bind:userDatas="currentUserData" v-if="showPanelAlbum"/>
   </div>
 </template>
 
 <script>
 import TableComp from '@/components/TableComp'
-import { getUsers } from '@/utils/api'
+import UserPostsPanel from '../components/UserPostsPanel'
+import UserAlbumPanel from '../components/UserAlbumPanel'
+import { getUsers, getUserPosts, getUserAlbums } from '@/utils/api'
 
 export default {
   name: 'UsersList',
   components: {
-    TableComp
+    TableComp,
+    UserPostsPanel,
+    UserAlbumPanel
   },
   data: function () {
     return {
       theadData: ['id', 'name', 'username', 'email'],
-      tbodyData: []
+      tbodyData: [],
+      showPanelPost: false,
+      showPanelProfile: false,
+      showPanelAlbum: false,
+      userPostsData: [],
+      userAlbumsData: [],
+      currentUserData: []
+    }
+  },
+  watch: {
+    showPanelPost: function () {
+      if (this.showPanelPost === true) {
+        this.showPanelProfile = false
+        this.showPanelAlbum = false
+      }
+    },
+    showPanelAlbum: function () {
+      if (this.showPanelAlbum === true) {
+        this.showPanelPost = false
+        this.showPanelProfile = false
+      }
+    },
+    showPanelProfile: function () {
+      if (this.showPanelProfile === true) {
+        this.showPanelPost = false
+        this.showPanelAlbum = false
+      }
     }
   },
   mounted: function () {
@@ -61,6 +96,35 @@ export default {
     }).catch(e => {
       console.log(e)
     })
+  },
+  methods: {
+    showUserPosts: function (data) {
+      getUserPosts(data.id).then(response => {
+        this.userPostsData = response.data
+        this.currentUserData = data
+        this.showPanelPost = true
+      }).catch(e => {
+        console.log(e)
+      })
+    },
+    showUserAlbums: function (data) {
+      getUserAlbums(data.id).then(response => {
+        this.userAlbumsData = response.data
+        this.currentUserData = data
+        this.showPanelAlbum = true
+      })
+    }
   }
 }
 </script>
+
+<style scoped>
+  .main-container {
+    display: flex;
+    flex-flow: row;
+  }
+  .container.two-part {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+</style>
