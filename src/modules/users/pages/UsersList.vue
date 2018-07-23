@@ -3,6 +3,7 @@
     <div class="container" v-bind:class="{ 'two-part': showPanelPost || showPanelProfile }">
       <div class="row">
         <div class="col">
+          <h5 class="title">User Lists</h5>
         </div>
       </div>
       <div class="row">
@@ -26,10 +27,10 @@
                 <td>{{ data.name }}</td>
                 <td>{{ data.email }}</td>
                 <td>
-                  <button class="btn btn-primary btn-sm" v-on:click="showUserPosts(data)">
+                  <button class="btn btn-primary btn-sm btn-show-post" v-on:click="showUserPosts(data)">
                     View User Post
                   </button>
-                  <button class="btn btn-primary btn-sm" v-on:click="showUserAlbums(data)">
+                  <button class="btn btn-primary btn-sm btn-show-album" v-on:click="showUserAlbums(data)">
                     View User Album
                   </button>
                 </td>

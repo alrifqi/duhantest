@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="main-container album-panel">
     <div class="container">
       <div class="head">
         <span>Album : {{ userDatas.name }}</span>

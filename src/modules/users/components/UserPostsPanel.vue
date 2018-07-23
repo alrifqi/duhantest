@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="main-container post-panel">
     <div class="container">
       <div class="head">
         <span>List Posts User : {{ userDatas.name }}</span>
