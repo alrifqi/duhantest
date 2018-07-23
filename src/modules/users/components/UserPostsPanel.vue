@@ -3,6 +3,7 @@
     <div class="container">
       <div class="head">
         <span>List Posts User : {{ userDatas.name }}</span>
+        <button class="btn btn-primary btn-sm" @click="$emit('openmodal')">New Post</button>
       </div>
       <ul class="list-group">
         <li class="list-group-item" v-for="post in postDatas" :key="post.id" v-on:click="getPostComment(post.id)">
@@ -55,6 +56,9 @@ export default {
   .head {
     margin: 10px 0;
     font-weight: 600;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
   }
   .post-comment {
     border-top: 1px solid rgba(0,0,0,.125);

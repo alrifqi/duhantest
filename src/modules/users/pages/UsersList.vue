@@ -40,8 +40,9 @@
         </div>
       </div>
     </div>
-    <UserPostsPanel v-bind:postDatas="userPostsData" v-bind:userDatas="currentUserData" v-if="showPanelPost"/>
+    <UserPostsPanel v-bind:postDatas="userPostsData" v-bind:userDatas="currentUserData" v-if="showPanelPost" @openmodal="openAddPostModal()"/>
     <UserAlbumPanel v-bind:albumDatas="userAlbumsData" v-bind:userDatas="currentUserData" v-if="showPanelAlbum"/>
+    <UserPostAdd v-if="showPostAddModal" @close="showPostAddModal = false"/>
   </div>
 </template>
 
@@ -49,6 +50,7 @@
 import TableComp from '@/components/TableComp'
 import UserPostsPanel from '../components/UserPostsPanel'
 import UserAlbumPanel from '../components/UserAlbumPanel'
+import UserPostAdd from '../components/UserPostAdd'
 import { getUsers, getUserPosts, getUserAlbums } from '@/utils/api'
 
 export default {
@@ -56,7 +58,8 @@ export default {
   components: {
     TableComp,
     UserPostsPanel,
-    UserAlbumPanel
+    UserAlbumPanel,
+    UserPostAdd
   },
   data: function () {
     return {
@@ -67,7 +70,8 @@ export default {
       showPanelAlbum: false,
       userPostsData: [],
       userAlbumsData: [],
-      currentUserData: []
+      currentUserData: [],
+      showPostAddModal: false
     }
   },
   watch: {
@@ -113,6 +117,9 @@ export default {
         this.currentUserData = data
         this.showPanelAlbum = true
       })
+    },
+    openAddPostModal: function () {
+      this.showPostAddModal = true
     }
   }
 }

@@ -5,13 +5,14 @@
         <span>Album : {{ userDatas.name }}</span>
       </div>
       <ul class="list-group">
-        <li class="list-group-item" v-for="album in albumDatas" :key="album.id">
+        <li class="list-group-item photo-title" v-for="album in albumDatas" :key="album.id" v-on:click="getPhotos(album)">
           {{ album.title }}
-          <div class="post-comment" v-if="showComment && currentPostIdComment == post.id">
-            <div class="comment" v-for="comment in postCommentsList" :key="comment.id">
-              <div class="name"><span>Name:</span> {{ comment.name }}</div>
-              <div class="email"><span>Email:</span> {{ comment.email }}</div>
-              <div class="body">{{ comment.body }}</div>
+          <div class="album-photos" v-if="showPhotos && currentAlbumIdPhotos == album.id">
+            <div class="photo-item">
+              <div v-for="photo in photosAlbumData" :key="photo.id">
+                <img v-bind:src="photo.thumbnailUrl"/>
+                <small>{{ photo.title }}</small>
+              </div>
             </div>
           </div>
         </li>
@@ -27,11 +28,15 @@ export default {
   props: ['userDatas', 'albumDatas'],
   data: function () {
     return {
-      photosAlbumData: []
+      photosAlbumData: [],
+      currentAlbumIdPhotos: 0,
+      showPhotos: false
     }
   },
   methods: {
     getPhotos: function (data) {
+      this.currentAlbumIdPhotos = data.id
+      this.showPhotos = true
       getPhotosAlbum(data.id).then(response => {
         this.photosAlbumData = response.data
       }).catch(e => {
@@ -52,23 +57,21 @@ export default {
     margin: 10px 0;
     font-weight: 600;
   }
-  .post-comment {
+  .album-photos{
     border-top: 1px solid rgba(0,0,0,.125);
     display: flex;
     flex-flow: column;
   }
-  .comment {
-    display: flex;
-    flex-flow: column;
-    padding: 5px 10px;
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: 10px;
-    margin: 2px 0;
+  .photo-title {
+    cursor: pointer;
   }
-  .comment > .name, .comment > .email{
-    font-size: 12px;
+  .photo-title:hover {
+    background-color: rgba(0,0,0,.125);
   }
-  .comment  span {
-    font-weight: 600;
+  .photo-item {
+    display: inline-grid;
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+    grid-template-columns:150px 150px;
   }
 </style>

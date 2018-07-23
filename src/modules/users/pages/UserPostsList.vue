@@ -10,7 +10,7 @@ export default {
   name: 'UserPostsList',
   data: function () {
     return {
-      tbodyData
+      tbodyData: []
     }
   },
   mounted: function () {
