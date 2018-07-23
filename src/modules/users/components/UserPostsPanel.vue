@@ -3,10 +3,10 @@
     <div class="container">
       <div class="head">
         <span>List Posts User : {{ userDatas.name }}</span>
-        <button class="btn btn-primary btn-sm" @click="$emit('openmodal')">New Post</button>
+        <button class="btn btn-primary btn-sm" @click="$emit('openmodal', userDatas.id, userDatas.name)">New Post</button>
       </div>
       <ul class="list-group">
-        <li class="list-group-item" v-for="post in postDatas" :key="post.id" v-on:click="getPostComment(post.id)">
+        <li class="list-group-item post-title" v-bind:class="{ 'post-title-expaned': showComment && currentPostIdComment == post.id }" v-for="post in postDatas" :key="post.id" v-on:click="getPostComment(post.id)">
           {{ post.title }}
           <div class="post-comment" v-if="showComment && currentPostIdComment == post.id">
             <div class="comment" v-for="comment in postCommentsList" :key="comment.id">
@@ -78,5 +78,14 @@ export default {
   }
   .comment  span {
     font-weight: 600;
+  }
+  .post-title {
+    cursor: pointer;
+  }
+  .post-title:hover {
+    background-color: rgba(0,0,0,.125);
+  }
+  .post-title-expaned:hover {
+    background-color: white;
   }
 </style>

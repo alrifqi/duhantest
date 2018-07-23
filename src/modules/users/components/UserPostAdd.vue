@@ -3,24 +3,35 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
           <div class="modal-header">
             <slot name="header">
-              default header
+              Add Post User : {{ user.name }} {{ formdata.title }}
             </slot>
           </div>
 
           <div class="modal-body">
             <slot name="body">
-              default body
+              <form>
+                <div class="form-group">
+                  <label for="title">Post Title</label>
+                  <input type="text" class="form-control" id="title" placeholder="Title" v-model="formdata.title">
+                  <input type="hidden" v-bind:value="user.id" v-modal="formdata.userid"/>
+                </div>
+                <div class="form-group">
+                  <label for="body">Post Content</label>
+                  <textarea id="body" class="form-control" v-model="formdata.body"></textarea>
+                </div>
+              </form>
             </slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
-              default footer
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
+              <button class="btn btn-sm btn-warning modal-default-button" @click="$emit('close')">
+                Close
+              </button>
+              <button class="btn btn-sm btn-primary" @click="savePost()">
+                Save
               </button>
             </slot>
           </div>
@@ -31,8 +42,32 @@
 </template>
 
 <script>
+import { postUserPost } from '@/utils/api'
 export default {
-  name: 'UserPostAdd'
+  name: 'UserPostAdd',
+  props: ['user'],
+  data: function () {
+    return {
+      formdata: [
+        { title: '' },
+        { body: '' },
+        { userid: '' }
+      ]
+    }
+  },
+  methods: {
+    savePost: function () {
+      let self = this
+      console.log()
+      postUserPost(this.formdata).then(function (response) {
+        console.log(response)
+      }).catch(function (error) {
+        console.log(error)
+      }).finally(function () {
+        self.$emit('close')
+      })
+    }
+  }
 }
 </script>
 
@@ -55,9 +90,8 @@ export default {
 }
 
 .modal-container {
-  width: 300px;
+  width: 600px;
   margin: 0px auto;
-  padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);

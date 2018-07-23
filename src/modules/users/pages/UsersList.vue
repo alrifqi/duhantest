@@ -40,9 +40,9 @@
         </div>
       </div>
     </div>
-    <UserPostsPanel v-bind:postDatas="userPostsData" v-bind:userDatas="currentUserData" v-if="showPanelPost" @openmodal="openAddPostModal()"/>
+    <UserPostsPanel v-bind:postDatas="userPostsData" v-bind:userDatas="currentUserData" v-if="showPanelPost" @openmodal="openAddPostModal"/>
     <UserAlbumPanel v-bind:albumDatas="userAlbumsData" v-bind:userDatas="currentUserData" v-if="showPanelAlbum"/>
-    <UserPostAdd v-if="showPostAddModal" @close="showPostAddModal = false"/>
+    <UserPostAdd v-if="showPostAddModal" @close="showPostAddModal = false" v-bind:user="userDataToPostAdd"/>
   </div>
 </template>
 
@@ -71,7 +71,8 @@ export default {
       userPostsData: [],
       userAlbumsData: [],
       currentUserData: [],
-      showPostAddModal: false
+      showPostAddModal: false,
+      userDataToPostAdd: {}
     }
   },
   watch: {
@@ -118,7 +119,8 @@ export default {
         this.showPanelAlbum = true
       })
     },
-    openAddPostModal: function () {
+    openAddPostModal: function (userid, userName) {
+      this.userDataToPostAdd = Object.assign({id: userid, name: userName})
       this.showPostAddModal = true
     }
   }
